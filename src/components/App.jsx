@@ -32,12 +32,12 @@ export class App extends Component {
     }));
   }
   
-  onSearch = (inputData) => {
-    this.setState({filter: inputData})
+  onChange = (e) => {
+    this.setState({filter: e.target.value})
   }
 
-  handleFilter = (inputData) => {
-    const searchedName = inputData.toLowerCase();
+  filterContacts = () => {
+    const searchedName = this.state.filter.toLowerCase();
     return this.state.contacts.filter(contact =>
       contact.name.toLowerCase().includes(searchedName)
     );
@@ -49,7 +49,12 @@ export class App extends Component {
     })
   }
 
+  onBlur = (e) => {
+    this.setState({filter: ''})
+  }
+  
   render() {
+    const filteredContacts = this.filterContacts();
     return (
       <Layout>
         <h1>Phonebook</h1>
@@ -57,8 +62,8 @@ export class App extends Component {
         </ContactForm>
 
         <h2>Contacts</h2>
-        <Filter onSearch={this.onSearch}></Filter>
-        <ContactList filteredContacts={this.handleFilter(this.state.filter)} onDelete={this.deleteContact}></ContactList>
+        <Filter onSearch={this.onChange} value={this.state.filter} onBlur={this.onBlur}></Filter>
+        <ContactList filteredContacts={filteredContacts} onDelete={this.deleteContact}></ContactList>
         
         <GlobalStyle></GlobalStyle>
       </Layout>
